@@ -5,13 +5,14 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 
 
-class CustomUser(AbstractBaseUser):
-    USERNAME_FIELD = 'username'
+class CustomUser(AbstractUser):
+    # Custom fields
+    pass
 
 
 def create_hash():
@@ -28,4 +29,4 @@ def sent_mail(sender, instance, **kwargs):
     invite_url = reverse('create_user_by_invite', kwargs={'hash_key': instance.hash_key})
     msg = "Welcome! https://{}".format(invite_url)
 
-    send_mail('Welcome', msg, 'no-reply@coolsite.com', [instance.email])
+    send_mail('Welcome', msg, settings.FROM_EMAIL, [instance.email])
