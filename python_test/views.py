@@ -11,9 +11,8 @@ def create_user_by_invite(request, hash_key):
     user_model = get_user_model()
     random_pswd = user_model.objects.make_random_password()
     try:
-        user = user_model(username = invite_user.email)
-        user.set_password(random_pswd)
-        user.save()
+        user = user_model.objects.create_user(
+            username=invite_user.email, email=invite_user.email, password=random_pswd)
     except IntegrityError:
         # If username is not unique
         return redirect('create_custom_user', email=invite_user.email)
