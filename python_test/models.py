@@ -27,6 +27,6 @@ class Invite(models.Model):
 @receiver(post_save, sender=Invite)
 def sent_mail(sender, instance, **kwargs):
     invite_url = reverse('create_user_by_invite', kwargs={'hash_key': instance.hash_key})
-    msg = "Welcome! https://{}".format(invite_url)
+    msg = "Welcome! https://{host}/{url}".format(host=settings.HOSTNAME, url=invite_url)
 
     send_mail('Welcome', msg, settings.FROM_EMAIL, [instance.email])
